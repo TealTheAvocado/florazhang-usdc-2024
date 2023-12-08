@@ -18,17 +18,27 @@
  * @param {JSON} scannedTextObj - A JSON object representing the scanned text.
  * @returns {JSON} - Search results.
  * */ 
- function findSearchTermInBooks(searchTerm, scannedTextObj) {
-    /** You will need to implement your search and 
-     * return the appropriate object here. */
-
+function findSearchTermInBooks(searchTerm, scannedTextObj) {
     var result = {
-        "SearchTerm": "",
+        "SearchTerm": searchTerm,
         "Results": []
     };
-    
+
+    scannedTextObj.forEach(book => {
+        book.Content.forEach(content => {
+            if (content.Text.includes(searchTerm)) {
+                result.Results.push({
+                    "ISBN": book.ISBN,
+                    "Page": content.Page,
+                    "Line": content.Line
+                });
+            }
+        });
+    });
+
     return result; 
 }
+
 
 /** Example input object. */
 const twentyLeaguesIn = [
@@ -101,4 +111,35 @@ if (test2result.Results.length == 1) {
     console.log("FAIL: Test 2");
     console.log("Expected:", twentyLeaguesOut.Results.length);
     console.log("Received:", test2result.Results.length);
+}
+/* positive match test */
+console.log("Test 3 Expected PASS");
+const test3result = findSearchTermInBooks("the", twentyLeaguesIn);
+if (JSON.stringify(twentyLeaguesOut) === JSON.stringify(test1result)) {
+        console.log("PASS: Positive Test");
+} else {
+    console.log("FAIL: Positive Test");
+    console.log("Expected a match with given ISBN, Page, and Line");
+    console.log("Received:", test1result);
+}
+/* negative match test */
+console.log("Test 4 Expected FAIL");
+const test4result = findSearchTermInBooks("xyz", twentyLeaguesIn);
+if (test2result.Results.length === 0) {
+    console.log("PASS: Negative Test");
+} else {
+    console.log("FAIL: Negative Test");
+    console.log("Expected 0 results");
+    console.log("Received:", test2result.Results.length);
+}
+
+/* case sensitive test for The pass means it is not case sensitive*/
+console.log("Case sensitive test for The")
+const test5result = findSearchTermInBooks("The", twentyLeaguesIn); // Assuming "The" does not occur but "the" does
+if (test3result.Results.length === 1) {
+    console.log("PASS: Case-Sensitive Test");
+} else {
+    console.log("FAIL: Case-Sensitive Test");
+    console.log("Expected 1 results for 'The'");
+    console.log("Received:", test3result.Results.length);
 }
