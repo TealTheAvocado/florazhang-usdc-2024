@@ -134,12 +134,13 @@ if (test2result.Results.length === 0) {
 }
 
 /* case sensitive test for The pass means it is not case sensitive*/
-console.log("Case sensitive test for The")
-const test5result = findSearchTermInBooks("The", twentyLeaguesIn); // Assuming "The" does not occur but "the" does
-if (test3result.Results.length === 1) {
+console.log("Case sensitive test for and and And")
+const test5result = findSearchTermInBooks("and", twentyLeaguesIn); 
+const test6result = findSearchTermInBooks("And", twentyLeaguesIn); 
+if (test5result.Results.length != test6result.Results.length) {
     console.log("PASS: Case-Sensitive Test");
 } else {
     console.log("FAIL: Case-Sensitive Test");
-    console.log("Expected 1 results for 'The'");
-    console.log("Received:", test3result.Results.length);
+    console.log("Expected not equal results for 'And' and 'and'");
+    console.log("Received:", test5result.Results.length, test6.Results.length);
 }
